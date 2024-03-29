@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>CS2 Stats Fetch</title>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+  document.getElementById('fetchStats').addEventListener('click', function() {
+    const steamId = document.getElementById('steamIdInput').value;
+    const url = "https://api.wmpvp.com/api/csgo/home/official/detailStats";
+    const payload = {
+      "toSteamId": steamId,
+      "mySteamId": steamId,
+      "accessToken": "" // In principle, a valid accessToken should be filled in here, but actually even leaving it blank will not affect the return value (obtain by listening perfectworld app)
+    };
+    const headers = {
+      'User-Agent': "okhttp/4.11.0",
+      'Content-Type': "application/json",
+      'gameType': "1,2",
+      'gameTypeStr': "1,2",
+      't': Math.floor(Date.now() / 1000)
+    };
+
+    fetch(url, {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify(payload)
+    })
+    .then(response => response.json())
+    .then(data => {
+      const historyRatings = data.data.historyRatings;
+      const averageRating = historyRatings.reduce((acc, val) => acc + val, 0) / historyRatings.length;
+
+      document.getElementById('nickName').textContent = data.data.nickName;
+      document.getElementById('hours').textContent = data.data.hours;
+      document.getElementById('friendCode').textContent = data.data.friendCode;
+      document.getElementById('recentRating').textContent = averageRating.toFixed(2);
+      document.getElementById('kd').textContent = data.data.kd;
+      document.getElementById('adr').textContent = data.data.adr;
+      document.getElementById('rating').textContent = data.data.rating;
+      document.getElementById('kast').textContent = data.data.kast;
+      document.getElementById('headShotRatio').textContent = data.data.headShotRatio;
+      document.getElementById('entryKillRatio').textContent = data.data.entryKillRatio;
+      document.getElementById('awpKillRatio').textContent = data.data.awpKillRatio;
+      document.getElementById('flashSuccessRatio').textContent = data.data.flashSuccessRatio;
+    })
+    .catch(error => console.error('Error:', error));
+  });
+});
+</script>
+</head>
+<body>
+
+<p>Steam ID: <input type="text" id="steamIdInput" /></p>
+<p>Nickname: <span id="nickName"></span></p>
+<p>Hours: <span id="hours"></span></p>
+<p>Friend Code: <span id="friendCode"></span></p>
+<p>Recent Rating: <span id="recentRating"></span></p>
+<p>KD: <span id="kd"></span></p>
+<p>ADR: <span id="adr"></span></p>
+<p>Rating: <span id="rating"></span></p>
+<p>KAST: <span id="kast"></span></p>
+<p>Head Shot Ratio: <span id="headShotRatio"></span></p>
+<p>Entry Kill Ratio: <span id="entryKillRatio"></span></p>
+<p>AWP Kill Ratio: <span id="awpKillRatio"></span></p>
+<p>Flash Success Ratio: <span id="flashSuccessRatio"></span></p>
+<button id="fetchStats">POST</button>
+
+</body>
+</html>
