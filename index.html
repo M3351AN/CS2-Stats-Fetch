@@ -5,14 +5,17 @@
 <title>CS2 Stats Fetch</title>
 <link rel="stylesheet" type="text/css" href="styles.css">
 <script>
+var invUrl = '';
+var steamId = '';
 document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('fetchStats').addEventListener('click', function() {
-    const steamId = document.getElementById('steamIdInput').value;
+    steamId = document.getElementById('steamIdInput').value;
     const url = "https://api.wmpvp.com/api/csgo/home/official/detailStats";
+    invUrl = 'https://gwapi.pwesports.cn/appdecoration/steamcn/csgo/decoration/getSteamInventoryPreview?steamId=' + steamId + '&previewSize=20';
     const payload = {
       "toSteamId": steamId,
       "mySteamId": steamId,
-      "accessToken": ""// In principle, a valid accessToken should be filled in here, but actually even leaving it blank will not affect the return value (obtain by listening perfectworld app)
+      "accessToken": ""// In principle, a valid accessToken should be filled in here, but actually even leaving it blank will not affect the return value (obtain by listening perfectworld app
     };
     const headers = {
       'User-Agent': "okhttp/4.11.0",
@@ -21,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
       'gameTypeStr': "1,2",
       't': Math.floor(Date.now() / 1000)
     };
+    getInv ();
 
     fetch(url, {
       method: 'POST',
@@ -55,6 +59,19 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 });
+function getInv() {
+  fetch(invUrl, {
+    method: 'GET'
+  })
+  .then(response => response.json())
+  .then(data => {
+    document.getElementById('invPrize').textContent = (data.result.totalPrice / 100) + ' CNY' || 'N/A';
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+}
+
 </script>
 </head>
 <body>
@@ -78,6 +95,10 @@ document.addEventListener('DOMContentLoaded', function() {
       <span class="stat-title">Hours:</span>
       <span id="hours" class="stat-value"></span>
     </div>
+    <div class="stat-item">
+      <span class="stat-title">Inventory Prize:</span>
+      <span id="invPrize" class="stat-value"></span>
+    </div>    
     <div class="stat-item">
       <span class="stat-title">Recent Rating:</span>
       <span id="recentRating" class="stat-value"></span>
