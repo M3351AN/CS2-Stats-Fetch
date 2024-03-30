@@ -43,10 +43,12 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('hours').textContent = data.data.hours || 'N/A';
       document.getElementById('friendCode').textContent = data.data.friendCode || 'N/A';
       document.getElementById('recentRating').textContent = (data.data.historyRatings && data.data.historyRatings.length > 0) ? (data.data.historyRatings.reduce((acc, val) => acc + val, 0) / data.data.historyRatings.length).toFixed(2) : 'N/A';
+      document.getElementById('winRate').textContent = data.data.winRate || 'N/A';
       document.getElementById('kd').textContent = data.data.kd || 'N/A';
       document.getElementById('adr').textContent = data.data.adr || 'N/A';
       document.getElementById('rating').textContent = data.data.rating || 'N/A';
-      document.getElementById('kast').textContent = data.data.kast + '&#x25' || 'N/A';
+      document.getElementById('kast').textContent = data.data.kast + '\%' || 'N/A';
+      document.getElementById('rws').textContent = data.data.rws || 'N/A';
       document.getElementById('headShotRatio').textContent = data.data.headShotRatio || 'N/A';
       document.getElementById('entryKillRatio').textContent = data.data.entryKillRatio || 'N/A';
       document.getElementById('awpKillRatio').textContent = data.data.awpKillRatio || 'N/A';
@@ -103,6 +105,10 @@ function getInv() {
       <span class="stat-title">Recent Rating:</span>
       <span id="recentRating" class="stat-value"></span>
     </div>
+    <div class="stat-item">
+      <span class="stat-title">Win Rate:</span>
+      <span id="winRate" class="stat-value"></span>
+    </div>
     <!-- 其他统计数据 -->
     <div class="stat-item">
       <span class="stat-title">K/D:</span>
@@ -119,6 +125,10 @@ function getInv() {
     <div class="stat-item">
       <span class="stat-title">KAST:</span>
       <span id="kast" class="stat-value"></span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-title">RWS:</span>
+      <span id="rws" class="stat-value"></span>
     </div>
     <div class="stat-item">
       <span class="stat-title">HS Ratio:</span>
