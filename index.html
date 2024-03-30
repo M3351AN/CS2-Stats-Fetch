@@ -3,16 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <title>CS2 Stats Fetch</title>
+<link rel="stylesheet" type="text/css" href="styles.css">
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-
   document.getElementById('fetchStats').addEventListener('click', function() {
     const steamId = document.getElementById('steamIdInput').value;
     const url = "https://api.wmpvp.com/api/csgo/home/official/detailStats";
     const payload = {
       "toSteamId": steamId,
       "mySteamId": steamId,
-      "accessToken": "" // In principle, a valid accessToken should be filled in here, but actually even leaving it blank will not affect the return value (obtain by listening perfectworld app)
+      "accessToken": ""// In principle, a valid accessToken should be filled in here, but actually even leaving it blank will not affect the return value (obtain by listening perfectworld app)
     };
     const headers = {
       'User-Agent': "okhttp/4.11.0",
@@ -29,47 +29,95 @@ document.addEventListener('DOMContentLoaded', function() {
     })
     .then(response => response.json())
     .then(data => {
-      const historyRatings = data.data.historyRatings;
-      const averageRating = historyRatings.reduce((acc, val) => acc + val, 0) / historyRatings.length;
-      const avatarPW = data.data.avatar;
+      // 更新头像和昵称
+      const avatarPW = data.data.avatar || 'https://avatars.akamai.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg';
       const avatar = avatarPW.replace('cdn.wmpvp.com/avatars', 'avatars.akamai.steamstatic.com').replace('.jpg', '_full.jpg');
-
       document.getElementById('avatar').src = avatar; 
       document.getElementById('nickName').textContent = data.data.nickName;
-      document.getElementById('hours').textContent = data.data.hours;
-      document.getElementById('friendCode').textContent = data.data.friendCode;
-      document.getElementById('recentRating').textContent = averageRating.toFixed(2);
-      document.getElementById('kd').textContent = data.data.kd;
-      document.getElementById('adr').textContent = data.data.adr;
-      document.getElementById('rating').textContent = data.data.rating;
-      document.getElementById('kast').textContent = data.data.kast;
-      document.getElementById('headShotRatio').textContent = data.data.headShotRatio;
-      document.getElementById('entryKillRatio').textContent = data.data.entryKillRatio;
-      document.getElementById('awpKillRatio').textContent = data.data.awpKillRatio;
-      document.getElementById('flashSuccessRatio').textContent = data.data.flashSuccessRatio;
+
+      // 更新统计数据
+      document.getElementById('hours').textContent = data.data.hours || 'N/A';
+      document.getElementById('friendCode').textContent = data.data.friendCode || 'N/A';
+      document.getElementById('recentRating').textContent = (data.data.historyRatings && data.data.historyRatings.length > 0) ? (data.data.historyRatings.reduce((acc, val) => acc + val, 0) / data.data.historyRatings.length).toFixed(2) : 'N/A';
+      document.getElementById('kd').textContent = data.data.kd || 'N/A';
+      document.getElementById('adr').textContent = data.data.adr || 'N/A';
+      document.getElementById('rating').textContent = data.data.rating || 'N/A';
+      document.getElementById('kast').textContent = data.data.kast || 'N/A';
+      document.getElementById('headShotRatio').textContent = data.data.headShotRatio || 'N/A';
+      document.getElementById('entryKillRatio').textContent = data.data.entryKillRatio || 'N/A';
+      document.getElementById('awpKillRatio').textContent = data.data.awpKillRatio || 'N/A';
+      document.getElementById('flashSuccessRatio').textContent = data.data.flashSuccessRatio || 'N/A';
     })
-    .catch(error => console.error('Error:', error));
+    .catch(error => {
+      console.error('Error:', error);
+      // 如果请求失败，设置默认头像
+      document.getElementById('avatar').src = 'https://avatars.akamai.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg';
+    });
   });
 });
 </script>
 </head>
 <body>
 
-<p>Steam ID: <input type="text" id="steamIdInput" /></p>
-<img id="avatar" src="" alt="Avatar" />
-<p>Nickname: <span id="nickName"></span></p>
-<p>Hours: <span id="hours"></span></p>
-<p>Friend Code: <span id="friendCode"></span></p>
-<p>Recent Rating: <span id="recentRating"></span></p>
-<p>KD: <span id="kd"></span></p>
-<p>ADR: <span id="adr"></span></p>
-<p>Rating: <span id="rating"></span></p>
-<p>KAST: <span id="kast"></span></p>
-<p>Head Shot Ratio: <span id="headShotRatio"></span></p>
-<p>Entry Kill Ratio: <span id="entryKillRatio"></span></p>
-<p>AWP Kill Ratio: <span id="awpKillRatio"></span></p>
-<p>Flash Success Ratio: <span id="flashSuccessRatio"></span></p>
-<button id="fetchStats">POST</button>
+<div class="container">
+  <!-- 输入框 -->
+  <div class="input-group">
+    <label for="steamIdInput">Steam ID:</label>
+    <input type="text" id="steamIdInput" class="steam-id-input"/>
+  </div>  <!-- 玩家信息 -->
+  <div class="profile-header">
+    <img id="avatar" src="https://avatars.akamai.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg" alt="Avatar" class="avatar"/>
+    <div class="player-info">
+      <span id="nickName" class="nickname"></span>
+      <span id="friendCode" class="friend-code"></span>
+    </div>
+  </div>
+  <!-- 统计数据 -->
+  <div class="stats">
+    <div class="stat-item">
+      <span class="stat-title">Hours:</span>
+      <span id="hours" class="stat-value"></span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-title">Recent Rating:</span>
+      <span id="recentRating" class="stat-value"></span>
+    </div>
+    <!-- 其他统计数据 -->
+    <div class="stat-item">
+      <span class="stat-title">KD:</span>
+      <span id="kd" class="stat-value"></span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-title">ADR:</span>
+      <span id="adr" class="stat-value"></span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-title">Rating:</span>
+      <span id="rating" class="stat-value"></span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-title">KAST:</span>
+      <span id="kast" class="stat-value"></span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-title">Head Shot Ratio:</span>
+      <span id="headShotRatio" class="stat-value"></span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-title">Entry Kill Ratio:</span>
+      <span id="entryKillRatio" class="stat-value"></span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-title">AWP Kill Ratio:</span>
+      <span id="awpKillRatio" class="stat-value"></span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-title">Flash Success Ratio:</span>
+      <span id="flashSuccessRatio" class="stat-value"></span>
+    </div>
+  </div>
+  <button id="fetchStats" class="fetch-stats">POST</button>
+</div>
 
 </body>
 </html>
