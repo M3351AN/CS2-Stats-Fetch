@@ -3,4 +3,5 @@ Fetch player's CS2 stats by steamid64, using API of 完美世界电竞(perfectwo
 
 https://tkm.icu/CS2-Stats-Fetch/
 
-![Screenshot_2024-03-30-10-28-34-968_com kiwibrowser browser-edit](https://github.com/M3351AN/CS2-Stats-Fetch/assets/65479796/bcb262a1-7713-4c47-9086-b8088bd03a1a)
+![Screenshot_2024-03-30-18-20-01-205_com venter hopweb-edit](https://github.com/M3351AN/CS2-Stats-Fetch/assets/65479796/791d0dba-f90f-4761-91b9-ea64f9552473)
+
