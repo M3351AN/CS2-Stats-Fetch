@@ -24,3 +24,6 @@ https://cs.tkm.icu/
 - Flash success ratio
 - Total inventory value (CNY)
 - 20 Most valuable inventory list
+
+## Sponsor
+![standard (3)](https://github.com/M3351AN/CS2-Stats-Fetch/assets/65479796/24fa26b2-79e4-4960-b881-063d8b6b9171)
