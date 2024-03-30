@@ -67,7 +67,16 @@ function getInv() {
   })
   .then(response => response.json())
   .then(data => {
+    // 更新总价
     document.getElementById('invPrize').textContent = (data.result.totalPrice / 100) + ' CNY' || 'N/A';
+    const invContainer = document.getElementById('inv');
+    data.result.previewItem.forEach(item => {
+      const itemDiv = document.createElement('div');
+      itemDiv.className = 'stat-item';
+      itemDiv.innerHTML = `<span class="stat-title" style="font-size: 10px;">${item.marketHashName}</span>
+                           <span class="stat-value" style="font-size: 12px;">${(item.steamPrice/100) +'CNY' || 'N/A'}</span>`;
+      invContainer.appendChild(itemDiv);
+    });
   })
   .catch(error => {
     console.error('Error:', error);
@@ -92,15 +101,12 @@ function getInv() {
     </div>
   </div>
   <!-- 统计数据 -->
+<div style="display: flex;">
   <div class="stats">
     <div class="stat-item">
       <span class="stat-title">Hours:</span>
       <span id="hours" class="stat-value"></span>
     </div>
-    <div class="stat-item">
-      <span class="stat-title">Inventory Prize:</span>
-      <span id="invPrize" class="stat-value"></span>
-    </div>    
     <div class="stat-item">
       <span class="stat-title">Recent Rating:</span>
       <span id="recentRating" class="stat-value"></span>
@@ -147,6 +153,13 @@ function getInv() {
       <span id="flashSuccessRatio" class="stat-value"></span>
     </div>
   </div>
+  <div id = "inv" class="stats">
+    <div class="stat-item">
+      <span class="stat-title" style="font-size: 13px;">Inventory Prize:</span>
+      <span id="invPrize" class="stat-value" style="font-size: 15px;"></span>
+    </div>    
+  </div>
+</div>
   <button id="fetchStats" class="fetch-stats">POST</button>
 </div>
 
