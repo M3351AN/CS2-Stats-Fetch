@@ -37,7 +37,7 @@ body {
 
 .friend-code {
   display: flex;
-  font-size: 16px;
+  font-size: 18px;
 }
 
 .stats {
@@ -59,7 +59,7 @@ body {
 }
 
 .stat-value {
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .fetch-stats {
