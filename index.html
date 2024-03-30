@@ -62,6 +62,10 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 function getInv() {
+  document.getElementById('inv').innerHTML = `<div class="stat-item">
+                                                 <span class="stat-title" style="font-size: 13px;">Inventory Prize:</span>
+                                                 <span id="invPrize" class="stat-value" style="font-size: 15px;"></span>
+                                              </div>`;
   fetch(invUrl, {
     method: 'GET'
   })
