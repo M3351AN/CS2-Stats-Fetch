@@ -31,7 +31,10 @@ document.addEventListener('DOMContentLoaded', function() {
     .then(data => {
       const historyRatings = data.data.historyRatings;
       const averageRating = historyRatings.reduce((acc, val) => acc + val, 0) / historyRatings.length;
+      const avatarPW = data.data.avatar;
+      const avatar = avatarPW.replace('cdn.wmpvp.com/avatars', 'avatars.akamai.steamstatic.com') + '_full.jpg';
 
+      document.getElementById('avatar').src = avatar; 
       document.getElementById('nickName').textContent = data.data.nickName;
       document.getElementById('hours').textContent = data.data.hours;
       document.getElementById('friendCode').textContent = data.data.friendCode;
@@ -52,6 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </head>
 <body>
 
+<img id="avatar" src="" alt="Avatar" width="256" height="256" />
 <p>Steam ID: <input type="text" id="steamIdInput" /></p>
 <p>Nickname: <span id="nickName"></span></p>
 <p>Hours: <span id="hours"></span></p>
