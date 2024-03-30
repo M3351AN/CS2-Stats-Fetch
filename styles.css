@@ -1,0 +1,96 @@
+/* styles.css */
+body {
+  background: linear-gradient(135deg,rgba(209, 209, 209, 1) 0%,rgba(229, 136, 24, 1) 99.60629921259843%);
+  background-size: cover;
+  color: white; 
+  padding: 15px;
+}
+
+.container {
+  max-width: 310px;
+  margin: 0;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-right: 20px;
+}
+
+.player-info {
+  flex-grow: 1;
+}
+
+.nickname {
+  display: flex;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.friend-code {
+  display: flex;
+  font-size: 16px;
+}
+
+.stats {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.stat-title {
+  font-weight: bold;
+}
+
+.stat-value {
+  font-size: 20px;
+}
+
+.fetch-stats {
+  background-color: #4CAF50; /* 按钮背景颜色 */
+  color: white; /* 按钮文字颜色 */
+  padding: 15px 32px; /* 按钮内边距 */
+  text-align: center; /* 文字居中 */
+  text-decoration: none; /* 去除下划线 */
+  display: inline-block; /* 行内块级元素 */
+  font-size: 16px; /* 文字大小 */
+  margin: 4px 2px; /* 外边距 */
+  cursor: pointer; /* 鼠标样式 */
+  border: none;
+  border-radius: 5px;
+}
+
+.input-group {
+  margin-bottom: 20px; /* 底部外边距 */
+}
+
+.input-group label {
+  display: block; /* 使标签占满整行 */
+  margin: 0 0 10px 0; /* 仅保留底部外边距 */
+  font-weight: bold; /* 加粗字体 */
+}
+
+.input-group input {
+  display: block; /* 使输入框占满整行 */
+  width: 100%; /* 宽度占满容器 */
+  padding: 10px; /* 内边距 */
+  margin: 0 0 10px 0; /* 仅保留底部外边距 */
+  background: rgba(255, 255, 255, 0.15); /* 背景颜色 */
+  border: 1px solid #fff; /* 边框颜色 */
+  border-radius: 5px; /* 边框圆角 */
+  color: white; /* 文字颜色 */
+  font-size: 16px; /* 字体大小 */
+}
