@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('kd').textContent = data.data.kd || 'N/A';
       document.getElementById('adr').textContent = data.data.adr || 'N/A';
       document.getElementById('rating').textContent = data.data.rating || 'N/A';
-      document.getElementById('kast').textContent = data.data.kast || 'N/A';
+      document.getElementById('kast').textContent = data.data.kast + '&#x25' || 'N/A';
       document.getElementById('headShotRatio').textContent = data.data.headShotRatio || 'N/A';
       document.getElementById('entryKillRatio').textContent = data.data.entryKillRatio || 'N/A';
       document.getElementById('awpKillRatio').textContent = data.data.awpKillRatio || 'N/A';
