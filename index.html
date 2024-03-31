@@ -5,13 +5,18 @@
 <title>CS2 Stats Fetch</title>
 <link rel="stylesheet" type="text/css" href="styles.css">
 <script>
+var url = "https://api.wmpvp.com/api/csgo/home/official/detailStats";
 var invUrl = '';
 var steamId = '';
 document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('fetchStats').addEventListener('click', function() {
     steamId = document.getElementById('steamIdInput').value;
-    const url = "https://api.wmpvp.com/api/csgo/home/official/detailStats";
     invUrl = 'https://gwapi.pwesports.cn/appdecoration/steamcn/csgo/decoration/getSteamInventoryPreview?steamId=' + steamId + '&previewSize=20';
+    getInv ();
+    getStats ();
+    });
+  });
+function getStats(){
     const payload = {
       "toSteamId": steamId,
       "mySteamId": steamId,
@@ -24,8 +29,6 @@ document.addEventListener('DOMContentLoaded', function() {
       'gameTypeStr': "1,2",
       't': Math.floor(Date.now() / 1000)
     };
-    getInv ();
-
     fetch(url, {
       method: 'POST',
       headers: headers,
@@ -59,8 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
       // 如果请求失败，设置默认头像
       document.getElementById('avatar').src = 'https://avatars.akamai.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg';
     });
-  });
-});
+}
 function getInv() {
   document.getElementById('inv').innerHTML = `<div class="stat-item">
                                                  <span class="stat-title" style="font-size: 13px;">Inventory Prize:</span>
