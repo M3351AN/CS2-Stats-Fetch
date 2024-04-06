@@ -8,15 +8,53 @@
 <script>
 var url = "https://api.wmpvp.com/api/csgo/home/official/detailStats";
 var invUrl = '';
-var steamId = '';
+var steamId;
 document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('fetchStats').addEventListener('click', function() {
-    steamId = document.getElementById('steamIdInput').value;
-    invUrl = 'https://gwapi.pwesports.cn/appdecoration/steamcn/csgo/decoration/getSteamInventoryPreview?steamId=' + steamId + '&previewSize=20';
-    getInv ();
-    getStats ();
+        getId();
+        waitForId();  
     });
   });
+
+function encodeFormData(data) {
+  return Object.keys(data)
+    .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
+    .join('&');
+}
+
+ 
+function getId() {
+  steamId ='';
+  steamLink = document.getElementById('steamIdInput').value;
+  console.log(steamLink);
+
+  const targetUrl = 'https://corsproxy.io/?' + encodeURIComponent('https://www.csgola.com/player');
+  //yes,csgola.com
+  const payload = {
+    'playerid': steamLink
+  };
+  const headers = {
+    'User-Agent': "okhttp/4.11.0",
+    'Host': "cs.tkm.icu",
+    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+  };
+
+  fetch(targetUrl, {
+    method: 'POST',
+    headers: headers,
+    body: encodeFormData(payload)
+  })
+  .then(response => response.json())
+  .then(data => {
+    steamId = data.msg;
+    console.log(data);
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+}
+
+
 function getStats(){
     const payload = {
       "toSteamId": steamId,
@@ -89,7 +127,15 @@ function getInv() {
     console.error('Error:', error);
   });
 }
-
+function waitForId() {
+  if(steamId) {
+    invUrl = 'https://gwapi.pwesports.cn/appdecoration/steamcn/csgo/decoration/getSteamInventoryPreview?steamId=' + steamId + '&previewSize=20';
+    getInv ();
+    getStats ();
+  } else {
+    setTimeout(waitForId, 100);
+  }
+} 
 </script>
 </head>
 <body>
@@ -97,7 +143,7 @@ function getInv() {
 <div class="container">
   <!-- 输入框 -->
   <div class="input-group">
-    <label for="steamIdInput">Steam ID:</label>
+    <label for="steamIdInput">Profile link / id64:</label>
     <input type="text" id="steamIdInput" class="steam-id-input"/>
   </div>  <!-- 玩家信息 -->
   <div class="profile-header">
