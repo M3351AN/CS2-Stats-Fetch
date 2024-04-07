@@ -102,6 +102,20 @@ function getStats(){
       document.getElementById('avatar').src = 'https://avatars.akamai.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg';
     });
 }
+
+function getPwa() {
+  fetch(pwaUrl, {
+    method: 'GET'
+  })
+  .then(response => response.json())
+  .then(data => {
+    document.getElementById('pwaId').textContent = 'PerfectWorld Arena ID: ' +  data.result.userId || '';
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+}
+
 function getInv() {
   document.getElementById('inv').innerHTML = `<div class="stat-item">
                                                  <span class="stat-title" style="font-size: 13px;">Inventory Prize:</span>
@@ -130,8 +144,10 @@ function getInv() {
 function waitForId() {
   if(steamId) {
     invUrl = 'https://gwapi.pwesports.cn/appdecoration/steamcn/csgo/decoration/getSteamInventoryPreview?steamId=' + steamId + '&previewSize=20';
-    getInv ();
+    pwaUrl = 'https://appengine.wmpvp.com/steamcn/app/common/getUserIdBySteamId?steamId=' + steamId;
     getStats ();
+    getInv ();
+    getPwa ();
   } else {
     setTimeout(waitForId, 100);
   }
@@ -151,6 +167,8 @@ function waitForId() {
     <div class="player-info">
       <span id="nickName" class="nickname"></span>
       <span id="friendCode" class="friend-code"></span>
+      <span id="pwaId" class="pwa-id"></span>
+
     </div>
   </div>
   <!-- 统计数据 -->
