@@ -11,7 +11,8 @@ var invUrl = '';
 var steamId;
 document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('fetchStats').addEventListener('click', function() {
-        getId();
+        //getId();
+        steamId=document.getElementById('steamIdInput').value;
         waitForId();  
     });
   });
@@ -159,7 +160,7 @@ function waitForId() {
 <div class="container">
   <!-- 输入框 -->
   <div class="input-group">
-    <label for="steamIdInput">Profile link / id64:</label>
+    <label for="steamIdInput">steamid64:</label>
     <input type="text" id="steamIdInput" class="steam-id-input"/>
   </div>  <!-- 玩家信息 -->
   <div class="profile-header">
