@@ -98,3 +98,44 @@ body {
   color: white; /* 文字颜色 */
   font-size: 16px; /* 字体大小 */
 }
+
+/* 优化整体布局 */
+.select-group {
+margin: 20px 0;
+font-family: Arial, sans-serif;
+}
+
+.select-group label {
+font-size: 16px;
+font-weight: bold;
+margin-bottom: 8px;
+display: block;
+color: #333;
+}
+
+.select-group select {
+width: 15%;
+padding: 10px 15px;
+font-size: 14px;
+border: 1px solid #ccc;
+border-radius: 5px;
+background-color: transparent;
+transition: all 0.3s ease;
+border: 1px solid #fff; /* 边框颜色 */
+border-radius: 5px; /* 边框圆角 */
+color: black; /* 文字颜色 */
+font-size: 16px; /* 字体大小 */
+}
+
+/* 当选择框获得焦点时的效果 */
+.select-group select:focus {
+border-color: #007bff;
+background-color: transparent;
+box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+outline: none;
+}
+
+/* 增加下拉箭头的样式 */
+.select-group select::-ms-expand {
+display: none;
+}

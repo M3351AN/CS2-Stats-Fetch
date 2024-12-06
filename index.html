@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('fetchStats').addEventListener('click', function() {
         //getId();
         steamId=document.getElementById('steamIdInput').value;
+        csgoSeasonId=document.getElementById('csgoSeasonId').value;
         waitForId();  
     });
   });
@@ -104,6 +105,48 @@ function getStats(){
     });
 }
 
+function getWmpvpStats() {
+    const wmpvpUrl = 'https://api.wmpvp.com/api/v2/csgo/pvpDetailDataStats';
+    const payload = {
+        "steamId64": steamId, // 替换为实际需要的steamId64
+        "csgoSeasonId": csgoSeasonId // 替换为实际的赛季ID
+    };
+
+    const headers = {
+        'User-Agent': "okhttp/4.11.0",
+        'Content-Type': "application/json",
+        't': Math.floor(Date.now() / 1000)
+    };
+
+    fetch(wmpvpUrl, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(payload)
+    })
+    .then(response => response.json())
+    .then(data => {
+        // 检查数据有效性
+        if (data && data.data) {
+            // 更新统计数据
+            document.getElementById('wmpvpName').textContent = data.data.name || 'N/A';
+            document.getElementById('wmpvpWinRate').textContent = data.data.winRate || 'N/A';
+            document.getElementById('wmpvpKd').textContent = data.data.kd || 'N/A';
+            document.getElementById('wmpvpAdr').textContent = data.data.adr || 'N/A';
+            document.getElementById('wmpvpRating').textContent = data.data.rating || 'N/A';
+            document.getElementById('wmpvpRws').textContent = data.data.rws || 'N/A';
+            document.getElementById('wmpvpHeadShotRatio').textContent = data.data.headShotRatio || 'N/A';
+            document.getElementById('wmpvpEntryKillRatio').textContent = data.data.entryKillRatio || 'N/A';
+        } else {
+            console.error('Invalid data structure:', data);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        // 如果请求失败，设置默认头像
+        document.getElementById('avatar').src = 'https://avatars.akamai.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg';
+    });
+}
+
 function getPwa() {
   fetch(pwaUrl, {
     method: 'GET'
@@ -147,6 +190,7 @@ function waitForId() {
     invUrl = 'https://gwapi.pwesports.cn/appdecoration/steamcn/csgo/decoration/getSteamInventoryPreview?steamId=' + steamId + '&previewSize=20';
     pwaUrl = 'https://appengine.wmpvp.com/steamcn/app/common/getUserIdBySteamId?steamId=' + steamId;
     getStats ();
+    getWmpvpStats ();
     getInv ();
     getPwa ();
   } else {
@@ -157,99 +201,167 @@ function waitForId() {
 </head>
 <body>
 
-<div class="container">
-  <!-- 输入框 -->
-  <div class="input-group">
-    <label for="steamIdInput">steamid64:</label>
-    <input type="text" id="steamIdInput" class="steam-id-input"/>
-  </div>  <!-- 玩家信息 -->
-  <div class="profile-header">
-    <img id="avatar" src="https://avatars.akamai.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg" alt="Avatar" class="avatar"/>
-    <div class="player-info">
-      <span id="nickName" class="nickname"></span>
-      <span id="friendCode" class="friend-code"></span>
-      <span id="pwaId" class="pwa-id"></span>
-
+    <div class="container">
+      <!-- 输入框 -->
+      <div class="input-group">
+        <label for="steamIdInput">steamid64:</label>
+        <input type="text" id="steamIdInput" class="steam-id-input"/>
+      </div>
+    
+      <!-- 选择框 -->
+      <div class="select-group">
+        <label for="csgoSeasonId">Season:</label>
+        <select id="csgoSeasonId">
+          <option value="S1">S1</option>
+          <option value="S2">S2</option>
+          <option value="S3">S3</option>
+          <option value="S4">S4</option>
+          <option value="S5">S5</option>
+          <option value="S6">S6</option>
+          <option value="S7">S7</option>
+          <option value="S8">S8</option>
+          <option value="S9">S9</option>
+          <option value="S10">S10</option>
+          <option value="S11">S11</option>
+          <option value="S12">S12</option>
+          <option value="S13">S13</option>
+          <option value="S14">S14</option>
+          <option value="S15">S15</option>
+          <option value="S16">S16</option>
+          <option value="S17">S17</option>
+          <option value="S18">S18</option>
+        </select>
+      </div>
+    
+      <!-- 玩家信息 -->
+      <div class="profile-header">
+        <img id="avatar" src="https://avatars.akamai.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg" alt="Avatar" class="avatar"/>
+        <div class="player-info">
+          <span id="nickName" class="nickname"></span>
+          <span id="friendCode" class="friend-code"></span>
+          <span id="pwaId" class="pwa-id"></span>
+        </div>
+      </div>
+    
+      <!-- 统计数据 -->
+      <div style="display: flex;">
+        <div class="stats">
+          <div class="stat-item">
+            <span class="stat-title">Hours:</span>
+            <span id="hours" class="stat-value"></span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-title">Recent Rating:</span>
+            <span id="recentRating" class="stat-value"></span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-title">Win Rate:</span>
+            <span id="winRate" class="stat-value"></span>
+          </div>
+          <!-- 其他统计数据 -->
+          <div class="stat-item">
+            <span class="stat-title">K/D:</span>
+            <span id="kd" class="stat-value"></span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-title">ADR:</span>
+            <span id="adr" class="stat-value"></span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-title">Rating:</span>
+            <span id="rating" class="stat-value"></span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-title">KAST:</span>
+            <span id="kast" class="stat-value"></span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-title">RWS:</span>
+            <span id="rws" class="stat-value"></span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-title">HS Ratio:</span>
+            <span id="headShotRatio" class="stat-value"></span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-title">Entry Kill Ratio:</span>
+            <span id="entryKillRatio" class="stat-value"></span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-title">AWP Kill Ratio:</span>
+            <span id="awpKillRatio" class="stat-value"></span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-title">Flash Success Ratio:</span>
+            <span id="flashSuccessRatio" class="stat-value"></span>
+          </div>
+        </div>
+    
+        <!-- 新增的 WMPVP 统计数据列 -->
+        <div class="stats">
+          <div class="stat-item">
+            <span class="stat-title">Wmpvp Name:</span>
+            <span id="wmpvpName" class="stat-value"></span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-title">Wmpvp Win Rate:</span>
+            <span id="wmpvpWinRate" class="stat-value"></span>
+          </div>
+          <!-- 其他统计数据 -->
+          <div class="stat-item">
+            <span class="stat-title">Wmpvp K/D:</span>
+            <span id="wmpvpKd" class="stat-value"></span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-title">Wmpvp ADR:</span>
+            <span id="wmpvpAdr" class="stat-value"></span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-title">Wmpvp Rating:</span>
+            <span id="wmpvpRating" class="stat-value"></span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-title">Wmpvp RWS:</span>
+            <span id="wmpvpRws" class="stat-value"></span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-title">Wmpvp HS Ratio:</span>
+            <span id="wmpvpHeadShotRatio" class="stat-value"></span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-title">Wmpvp Entry Kill Ratio:</span>
+            <span id="wmpvpEntryKillRatio" class="stat-value"></span>
+          </div>
+        </div>
+        <div id = "inv" class="stats">
+            <div class="stat-item">
+                <div id="FreePalestine">
+                  <img src="https://s2.loli.net/2024/04/01/ZdHISCYlWG9xUai.png" width="256" height="171">
+                  <span class="stat-title" style="font-size: 24px;"><br>The Israeli occupation of Palestine has caused thousands of children to suffer every day.<br> Consider helping them: <br>
+                  <a href="https://www.pcrf.net/" target="_blank">PCRF</a> - 
+                  <a href="https://help.unicef.org/donate-to-children" target="_blank">UNICEF</a> - 
+                  <a href="https://donate.unrwa.org/gaza/~my-donation" target="_blank">UNRWA</a>
+            </span>
+            </div>
+              <span id="invPrize" class="stat-value" style="font-size: 15px;"></span>
+            </div>    
+          </div>
+      </div>
+    
+      <!-- 按钮 -->
+      <div style="display: flex;">
+        <button id="fetchStats" class="fetch-stats">POST</button>
+        <div id="copyright">
+          <script>
+            function Year(number) { return (number < 1000) ? number + 1900 : number; }
+            document.write('© '+Year(new Date().getYear())+' 渟雲 - All Rights Reserved');
+          </script>
+          <a href="https://www.hvhbbs.com">
+            <img src="https://github.com/M3351AN/CS2-Stats-Fetch/assets/65479796/a40d9ed5-d4fc-4401-a159-17e37f33cb9c"> 
+          </a>
+        </div>
+      </div>
     </div>
-  </div>
-  <!-- 统计数据 -->
-<div style="display: flex;">
-  <div class="stats">
-    <div class="stat-item">
-      <span class="stat-title">Hours:</span>
-      <span id="hours" class="stat-value"></span>
-    </div>
-    <div class="stat-item">
-      <span class="stat-title">Recent Rating:</span>
-      <span id="recentRating" class="stat-value"></span>
-    </div>
-    <div class="stat-item">
-      <span class="stat-title">Win Rate:</span>
-      <span id="winRate" class="stat-value"></span>
-    </div>
-    <!-- 其他统计数据 -->
-    <div class="stat-item">
-      <span class="stat-title">K/D:</span>
-      <span id="kd" class="stat-value"></span>
-    </div>
-    <div class="stat-item">
-      <span class="stat-title">ADR:</span>
-      <span id="adr" class="stat-value"></span>
-    </div>
-    <div class="stat-item">
-      <span class="stat-title">Rating:</span>
-      <span id="rating" class="stat-value"></span>
-    </div>
-    <div class="stat-item">
-      <span class="stat-title">KAST:</span>
-      <span id="kast" class="stat-value"></span>
-    </div>
-    <div class="stat-item">
-      <span class="stat-title">RWS:</span>
-      <span id="rws" class="stat-value"></span>
-    </div>
-    <div class="stat-item">
-      <span class="stat-title">HS Ratio:</span>
-      <span id="headShotRatio" class="stat-value"></span>
-    </div>
-    <div class="stat-item">
-      <span class="stat-title">Entry Kill Ratio:</span>
-      <span id="entryKillRatio" class="stat-value"></span>
-    </div>
-    <div class="stat-item">
-      <span class="stat-title">AWP Kill Ratio:</span>
-      <span id="awpKillRatio" class="stat-value"></span>
-    </div>
-    <div class="stat-item">
-      <span class="stat-title">Flash Success Ratio:</span>
-      <span id="flashSuccessRatio" class="stat-value"></span>
-    </div>
-  </div>
-  <div id = "inv" class="stats">
-    <div class="stat-item">
-        <div id="FreePalestine">
-          <img src="https://s2.loli.net/2024/04/01/ZdHISCYlWG9xUai.png" width="256" height="171">
-          <span class="stat-title" style="font-size: 24px;"><br>The Israeli occupation of Palestine has caused thousands of children to suffer every day.<br> Consider helping them: <br>
-          <a href="https://www.pcrf.net/" target="_blank">PCRF</a> - 
-          <a href="https://help.unicef.org/donate-to-children" target="_blank">UNICEF</a> - 
-          <a href="https://donate.unrwa.org/gaza/~my-donation" target="_blank">UNRWA</a>
-    </span>
-    </div>
-      <span id="invPrize" class="stat-value" style="font-size: 15px;"></span>
-    </div>    
-  </div>
-</div>
-<div style="display: flex;">
-  <button id="fetchStats" class="fetch-stats">POST</button>
-  <div id="copyright">
-		<script>
-			function Year(number) { return (number < 1000) ? number + 1900 : number; }
-			document.write('© '+Year(new Date().getYear())+' 渟雲 - All Rights Reserved');<!--te quiero mucho-->
-		</script>
-	        <a href="https://www.hvhbbs.com"><img src="https://github.com/M3351AN/CS2-Stats-Fetch/assets/65479796/a40d9ed5-d4fc-4401-a159-17e37f33cb9c"> </a>
-
-  </div>
-</div>
-</div>
-</body>
+    
+    </body>
 </html>
