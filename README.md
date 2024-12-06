@@ -3,7 +3,7 @@ Fetch player's CS2 stats by steamid64, using API of 完美世界电竞(perfectwo
 
 https://cs.tkm.icu/
 
-![image](https://github.com/user-attachments/assets/63a8df77-c523-4c30-86cd-d59c96995e20)
+![image](https://github.com/user-attachments/assets/10c087e5-8659-4cf6-b43a-96a0ecaa6283)
 
 ## Features
 - Steam Nickname
