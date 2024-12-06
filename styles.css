@@ -123,7 +123,7 @@ background-color: transparent;
 transition: all 0.3s ease;
 border: 1px solid #fff; /* 边框颜色 */
 border-radius: 5px; /* 边框圆角 */
-color: black; /* 文字颜色 */
+color: white; /* 文字颜色 */
 font-size: 16px; /* 字体大小 */
 }
 
@@ -138,4 +138,9 @@ outline: none;
 /* 增加下拉箭头的样式 */
 .select-group select::-ms-expand {
 display: none;
+}
+
+/* 定义下拉选项的字体颜色 */
+.select-group select option {
+  color: black; /* 下拉选项的字体颜色 */
 }
